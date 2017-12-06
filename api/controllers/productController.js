@@ -14,9 +14,6 @@ exports.listAll = function(req, res) {
       if(err) {
         res.status(500).json(err);
       }
-
-      //products.push({ meta: this.productCount() });
-
       res.status(200).json(products);
     });
 };
@@ -30,15 +27,4 @@ exports.create = function(req, res) {
     }
     res.status(201).json(product);
   });
-};
-
-exports.productCount = function(req, res) {
-  Products.count()
-    .exec(function (err, count) {
-      if (err) {
-        res.status(500).json(err);
-      }
-      //return count;
-      res.status(200).json(count);
-    });
 };

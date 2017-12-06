@@ -17,23 +17,13 @@ export default class Products extends React.Component {
     axios.get('http://127.0.0.1:3000/products')
       .then(data => this.setState({ products: data.data }))
       .catch(err => {
-        alert('Hubo un error ?'+ JSON.stringify(err));
-        console.log(err);
-      });
-  }
-
-  getProductCount() {
-    axios.get('http://127.0.0.1:3000/products/count')
-      .then(data => this.setState({ productsCount: data.data }))
-      .catch(err => {
-        alert('Hubo un error !');
+        // alert('Hubo un error ?'+ JSON.stringify(err));
         console.log(err);
       });
   }
 
   componentDidMount() {
     this.getProducts();
-    this.getProductCount();
   }
 
   render() {
@@ -43,7 +33,7 @@ export default class Products extends React.Component {
 
           <nav className="pagination" role="navigation" aria-label="pagination">
             <ul className="pagination-list">
-
+              {/* @TODO add pager */}
             </ul>
           </nav>
 

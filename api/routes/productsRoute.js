@@ -5,6 +5,4 @@ module.exports = function(app) {
     .get(product.listAll)
     .post(product.create);
 
-  app.route('/products/count')
-    .get(product.productCount);
 };
