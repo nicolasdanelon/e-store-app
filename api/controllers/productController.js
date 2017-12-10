@@ -20,7 +20,8 @@ exports.listAll = function(req, res) {
         res.status(200).json({
           products: products,
           page: pageOptions.page,
-          pages: Math.floor(count / pageOptions.limit)
+          pages: Math.floor(count / pageOptions.limit),
+          total: count
         });
       })
     });
