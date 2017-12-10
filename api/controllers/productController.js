@@ -7,6 +7,8 @@ exports.listAll = function(req, res) {
     limit: req.query.limit || 10
   };
 
+  console.log(req.query);
+
   Products.find()
     .skip(pageOptions.page * pageOptions.limit)
     .limit(pageOptions.limit)

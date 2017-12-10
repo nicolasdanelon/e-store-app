@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 import axios from 'axios';
-import Item from './Item';
+import Product from './product';
 
-export default class Products extends React.Component {
+export default class productList extends React.Component {
 
   constructor(props) {
     super(props);
@@ -27,21 +27,16 @@ export default class Products extends React.Component {
   }
 
   render() {
+    if (!this.state.products) {
+      return <span>Cargando...</span>;
+    }
+
     return (
       <section className="section">
         <div className="columns">
-
-          <nav className="pagination" role="navigation" aria-label="pagination">
-            <ul className="pagination-list">
-              {/* @TODO add pager */}
-            </ul>
-          </nav>
-
-          {this.state.products === null ?
-            <span>Cargando!</span> :
-            this.state.products.map(product =>
-              <Item product={product} />
-            )
+          {
+            this.state.products.map((product, i) =>
+              <Product key={i} product={product} productIterator={i} />)
           }
         </div>
       </section>

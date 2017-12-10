@@ -1,19 +1,16 @@
-import React,{ Component } from 'react';
+import React, { Component } from 'react';
+import Main from './Main.js';
+import Header from "./Header.js";
+import Footer from "./Footer.js";
 
-import Header from './Header.jsx';
-import Products from './products/Products.js';
-import Hero from './Hero.js';
-import Footer from './Footer.jsx';
-
-export default class App extends React.Component {
-    render() {
-        return (
-            <div>
-                <Header />
-                <Hero />
-                <Products />
-                <Footer />
-            </div>
-        );
-    }
+export default class App extends Component {
+  render() {
+    return (
+      <div>
+        <Header />
+        <Main />
+        <Footer />
+      </div>
+    );
+  }
 }
