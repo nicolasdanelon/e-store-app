@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
+import { FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
+import axios from 'axios';
 
 const fields = [
-  {type:'text', placeholder:'Product Name', id:'name'},
+  {type:'text', placeholder:'Product Name', id:'productName'},
   {type:'text', placeholder:'Brand', id:'brand'},
   {type:'number', placeholder:'Price', id:'price'},
   {type:'number', placeholder:'List Price', id:'listPrice'},
@@ -14,17 +16,24 @@ export default class AddProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
-      category_id: '',
-      list_price: '',
+      categoryId: '',
+      listPrice: '',
       price: '',
-      name: '',
+      productName: '',
       brand: '',
+      done: false,
     };
   }
 
-  handleChange(e) {
-    this.setState({ value: e.target.value });
+  handleSelect(eventKey) {
+    this.setState({
+      activePage: eventKey,
+    });
+  }
+
+  handleChange(e, fieldName) {
+    const field = {[fieldName]:e.target.value};
+    this.setState(field);
   }
 
   renderRowForm(inputType, placeholder, id) {
@@ -32,23 +41,44 @@ export default class AddProduct extends Component {
       <FormGroup
         controlId={id}
         key={id}
-        >
+      >
         <ControlLabel>{placeholder}</ControlLabel>
         <FormControl
           type={inputType}
-          value={this.state.value}
+          value={this.state[id]}
           placeholder={placeholder}
-          onChange={(e) => this.handleChange(e)}
+          onChange={(e) => this.handleChange(e, id)}
         />
         <FormControl.Feedback />
       </FormGroup>
     )
   }
 
+  submit() {
+    axios.post('http://127.0.0.1:3000/products', {
+      category_id: this.state.categoryId,
+      list_price: this.state.listPrice,
+      price: this.state.price,
+      name: this.state.productName,
+      brand: this.state.brand,
+    }, {
+      headers: {
+        'Origin': 'http://127.0.0.1/'
+      }})
+      .then(data =>
+        this.setState({ done: true })
+      )
+      .catch(err => console.log('error', err))
+  }
+
   render() {
     return (
       <form>
         {fields.map(field => this.renderRowForm(field.type, field.placeholder, field.id ))}
+        <Button onClick={() => this.submit()}>
+          Enviar!
+        </Button>
+        { this.state.done && <Redirect push to='/'/> }
       </form>
     )
   }

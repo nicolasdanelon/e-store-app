@@ -1,22 +1,28 @@
 const mongoose = require('mongoose'),
- Products = mongoose.model('Products');
+  Products = mongoose.model('Products');
 
 exports.listAll = function(req, res) {
   let pageOptions = {
-    page: req.query.page || 0,
-    limit: req.query.limit || 10
+    page: Math.abs(req.query.page) || 0,
+    limit: Math.abs(req.query.limit) || 9
   };
-
-  console.log(req.query);
 
   Products.find()
     .skip(pageOptions.page * pageOptions.limit)
     .limit(pageOptions.limit)
+    .sort([['created_at', -1]])
     .exec(function (err, products) {
-      if(err) {
-        res.status(500).json(err);
-      }
-      res.status(200).json(products);
+      Products.count().exec(function (err, count) {
+        if(err) {
+          res.status(500).json(err);
+        }
+        console.log(products);
+        res.status(200).json({
+          products: products,
+          page: pageOptions.page,
+          pages: Math.floor(count / pageOptions.limit)
+        });
+      })
     });
 };
 
@@ -25,8 +31,10 @@ exports.create = function(req, res) {
 
   newProduct.save(function(err, product) {
     if (err) {
+      console.log('err', err);
       res.status(500).json(err);
     }
+    console.log('err', product);
     res.status(201).json(product);
   });
 };

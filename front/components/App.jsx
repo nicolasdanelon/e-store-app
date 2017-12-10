@@ -8,7 +8,9 @@ export default class App extends Component {
     return (
       <div>
         <Header />
-        <Main />
+        <div className="container">
+          <Main />
+        </div>
         <Footer />
       </div>
     );
