@@ -6,9 +6,10 @@ const products = require('./models/productsModel');
 const bodyParser = require('body-parser');
 const routes = require('./routes/productsRoute');
 const cors = require('cors');
+const swaggerJSDoc = require('swagger-jsdoc');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/estore');
+mongoose.connect('mongodb://db/estore');
 
 let whitelist = [
   'http://db',
@@ -22,11 +23,11 @@ let whitelist = [
 let corsOptions = {
   optionsSuccessStatus: 200,
   origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
+    // if (whitelist.indexOf(origin) !== -1) {
       callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS ' + origin))
-    }
+    // } else {
+    //   callback(new Error('Not allowed by CORS ' + origin))
+    // }
   }
 };
 
@@ -36,6 +37,28 @@ app.use(bodyParser.json());
 app.use(function (req, res, next) {
   res.set('Access-Control-Allow-Origin', '*');
   next();
+});
+
+const swaggerDefinition = {
+  info: {
+    title: 'E-Shop API',
+    version: '1.0.0',
+    description: 'API for E-commerce',
+  },
+  host: '127.0.0.1:3000',
+  basePath: '/',
+};
+
+const options = {
+  swaggerDefinition: swaggerDefinition,
+  apis: ['./routes/*.*'],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+
+app.get('/swagger.json', function(req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
 });
 
 routes(app);

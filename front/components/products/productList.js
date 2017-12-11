@@ -10,7 +10,7 @@ export default class productList extends React.Component {
     this.state = {
       products: null,
       productsCount: null,
-      activePage: 1,
+      activePage: 0,
       pages: 0,
     };
   }
@@ -20,7 +20,13 @@ export default class productList extends React.Component {
   }
 
   getProducts(pageNumber) {
-    axios.get(`http://127.0.0.1:3000/products?page=${pageNumber}&${this.getRandomArbitrary()}`, {
+    let page = '';
+
+    if (pageNumber && this.state.total > 9) {
+      page = `?page=${pageNumber}`
+    }
+
+    axios.get(`http://127.0.0.1:3000/products${page}`, {
       headers: {
         'Origin': 'http://127.0.0.1:8000/'
       }
@@ -30,6 +36,7 @@ export default class productList extends React.Component {
           products: data.products,
           activePage: data.page,
           pages: data.pages,
+          total: data.total,
         })
       })
       .catch(err => {
@@ -43,7 +50,7 @@ export default class productList extends React.Component {
   }
 
   componentDidMount() {
-    this.getProducts(1);
+    this.getProducts();
   }
 
   render() {
@@ -54,6 +61,7 @@ export default class productList extends React.Component {
     return (
       <section className="section">
         <div className="row text-center">
+          {this.state.total > 9 &&
           <Pagination
             prev
             next
@@ -61,7 +69,7 @@ export default class productList extends React.Component {
             items={this.state.pages}
             activePage={this.state.activePage}
             onSelect={this.handleSelect.bind(this)}
-          />
+          />}
         </div>
         <div className="row">
           {
